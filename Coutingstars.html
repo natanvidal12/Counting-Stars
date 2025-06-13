@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Counting Stars</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+      overflow: hidden;
+      height: 100vh;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.star {
+  position: absolute;
+  top: -10px;
+  font-size: 1.2rem;
+  color: #ffffff;
+  animation: fall linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <h1>Counting Stars... ★</h1>  <script>
+    function createStar() {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.textContent = '★';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = (2 + Math.random() * 3) + 's';
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, 5000);
+    }
+
+    setInterval(createStar, 200);
+  </script></body>
+</html>
