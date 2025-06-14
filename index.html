@@ -33,12 +33,16 @@
       position: absolute;
       top: -10px;
       font-size: 2.2rem;
-      color: #ffffff;
       animation: fall linear infinite;
       cursor: pointer;
       text-shadow: 0 0 10px #fff;
       user-select: none;
       pointer-events: auto;
+    }
+
+    .star.gold {
+      color: gold;
+      text-shadow: 0 0 15px gold;
     }
 
     @keyframes fall {
@@ -54,7 +58,7 @@
 
     .reward {
       position: fixed;
-      top: 50%;
+      top: 30%;
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 2.5rem;
@@ -101,7 +105,7 @@
       scoreElement.textContent = score;
       star.remove();
 
-      if (score >= 100 && !prizeGiven) {
+      if (score === 100 && !prizeGiven) {
         prizeGiven = true;
         giveReward();
       }
@@ -112,9 +116,14 @@
       star.classList.add('star');
       star.textContent = '★';
       star.style.left = Math.random() * 100 + 'vw';
-      star.style.animationDuration = (5 + Math.random() * 2) + 's'; // mais lento ainda
+      star.style.animationDuration = (5 + Math.random() * 2) + 's';
 
-      // Compatível com PC e celular
+      // Se já alcançou 100 pontos, deixa a estrela dourada
+      if (score >= 100) {
+        star.classList.add('gold');
+      }
+
+      // Eventos de clique e toque
       star.addEventListener('click', () => addPointAndRemove(star));
       star.addEventListener('touchstart', (e) => {
         e.preventDefault();
@@ -125,7 +134,7 @@
 
       setTimeout(() => {
         star.remove();
-      }, 8000); // remove depois de cair
+      }, 8000);
     }
 
     function giveReward() {
@@ -142,7 +151,6 @@
       }, 10000);
     }
 
-    // Cria mais estrelas por segundo (a cada 100ms)
     setInterval(createStar, 100);
   </script>
 </body>
