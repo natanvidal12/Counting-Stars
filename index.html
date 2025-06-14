@@ -32,17 +32,18 @@
     .star {
       position: absolute;
       top: -10px;
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       animation: fall linear infinite;
       cursor: pointer;
       text-shadow: 0 0 10px #fff;
       user-select: none;
       pointer-events: auto;
+      color: white;
     }
 
-    .star.gold {
-      color: gold;
-      text-shadow: 0 0 15px gold;
+    .gold {
+      color: gold !important;
+      text-shadow: 0 0 12px gold;
     }
 
     @keyframes fall {
@@ -58,12 +59,12 @@
 
     .reward {
       position: fixed;
-      top: 30%;
+      top: 25%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 2.5rem;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 30px;
+      font-size: 1.6rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
       border: 2px solid #fff;
       border-radius: 20px;
       animation: pop 0.5s ease;
@@ -71,6 +72,8 @@
       color: #ffb3ec;
       box-shadow: 0 0 20px #ff69b4;
       z-index: 1000;
+      width: 90%;
+      max-width: 400px;
     }
 
     @keyframes pop {
@@ -79,10 +82,10 @@
     }
 
     .heart {
-      font-size: 3rem;
+      font-size: 2.5rem;
       animation: beat 1s infinite;
       display: inline-block;
-      margin-top: 10px;
+      margin-top: 15px;
     }
 
     @keyframes beat {
@@ -97,8 +100,8 @@
 
   <script>
     let score = 0;
-    const scoreElement = document.getElementById('score');
     let prizeGiven = false;
+    const scoreElement = document.getElementById('score');
 
     function addPointAndRemove(star) {
       score++;
@@ -118,12 +121,11 @@
       star.style.left = Math.random() * 100 + 'vw';
       star.style.animationDuration = (5 + Math.random() * 2) + 's';
 
-      // Se já alcançou 100 pontos, deixa a estrela dourada
+      // Aplica classe dourada se a pontuação for 100 ou mais
       if (score >= 100) {
         star.classList.add('gold');
       }
 
-      // Eventos de clique e toque
       star.addEventListener('click', () => addPointAndRemove(star));
       star.addEventListener('touchstart', (e) => {
         e.preventDefault();
@@ -141,11 +143,12 @@
       const reward = document.createElement('div');
       reward.className = 'reward';
       reward.innerHTML = `
-        🌟 Você chegou em 100 estrelas!<br>
-        <strong>Você merece todo o meu universo!</strong><br>
+        <div>🌟 Você chegou em <strong>100 estrelas!</strong></div>
+        <div style="margin-top: 10px;">Você merece todo o meu universo!</div>
         <div class="heart">💖</div>
       `;
       document.body.appendChild(reward);
+
       setTimeout(() => {
         reward.remove();
       }, 10000);
