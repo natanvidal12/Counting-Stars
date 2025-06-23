@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
   <title>Counting Stars</title>
@@ -58,6 +59,7 @@
         transform: translateY(-10px);
         opacity: 1;
       }
+
       100% {
         transform: translateY(110vh);
         opacity: 0;
@@ -88,6 +90,7 @@
         transform: scale(0) translate(-50%, -50%);
         opacity: 0;
       }
+
       100% {
         transform: scale(1) translate(-50%, -50%);
         opacity: 1;
@@ -102,16 +105,19 @@
     }
 
     @keyframes beat {
+
       0%,
       100% {
         transform: scale(1);
       }
+
       50% {
         transform: scale(1.3);
       }
     }
   </style>
 </head>
+
 <body>
   <h1>Counting Stars... ★</h1>
   <div class="score">
@@ -122,6 +128,8 @@
   <script>
     let score = 0;
     let prizeGiven = false;
+    let wishSent = false;
+
     const scoreElement = document.getElementById('score');
     const funMessage = document.getElementById('funMessage');
 
@@ -134,6 +142,10 @@
         prizeGiven = true;
         giveReward();
         funMessage.style.display = 'block';
+      }
+
+      if (score === 200 && !wishSent) {
+        showFallingStarChoice();
       }
     }
 
@@ -184,7 +196,101 @@
       setTimeout(() => reward.remove(), 10000);
     }
 
+    function showFallingStarChoice() {
+      const modal = document.createElement('div');
+      modal.className = 'reward';
+      modal.innerHTML = `
+      <div>Preparada para a estrela cadente?</div>
+      <div style="margin-top: 15px;">
+        <button onclick="handleWishAnswer(true)" style="margin-right: 10px;">Sim</button>
+        <button onclick="handleWishAnswer(false)">Não</button>
+      </div>
+    `;
+      document.body.appendChild(modal);
+    }
+
+    function handleWishAnswer(answer) {
+      document.querySelector('.reward')?.remove();
+
+      const msg = document.createElement('div');
+      msg.className = 'reward';
+      msg.textContent = answer ? 'Então aí vem ela...' : 'Vai aparecer mesmo assim kkj';
+      document.body.appendChild(msg);
+
+      setTimeout(() => {
+        msg.remove();
+        spawnWishStar();
+      }, 2000);
+    }
+
+    function spawnWishStar() {
+      const star = document.createElement('div');
+      star.classList.add('star', 'gold');
+      star.style.left = '50vw';
+      star.style.top = '10px';
+      star.style.fontSize = '8rem';
+      star.style.animationDuration = '3s';
+      star.textContent = '★';
+
+      star.addEventListener('click', () => {
+        if (!wishSent) showWishForm();
+        star.remove();
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        if (!wishSent) {
+          star.remove();
+          spawnWishStar();
+        }
+      }, 8000);
+    }
+
+    setTimeout(() => star.remove(), 8000);
+
+
+    function showWishForm() {
+      wishSent = true;
+
+      const formContainer = document.createElement('div');
+      formContainer.className = 'reward';
+
+      formContainer.innerHTML = `
+    <form id="desejoForm">
+      <label for="desejo">Qual seu desejo?</label><br><br>
+      <input type="text" name="desejo" id="desejo" required style="width: 100%; padding: 10px; font-size: 1rem;"><br><br>
+      <button type="submit" style="padding: 10px 20px;">Enviar</button>
+    </form>
+  `;
+
+      document.body.appendChild(formContainer); // ← Só depois disso que o form existe no DOM
+
+      // Agora o formulário já está no DOM, pode pegar ele
+      document.getElementById("desejoForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("https://formsubmit.co/ajax/natanvidal0313131%40gmail.com", {
+          method: "POST",
+          body: formData,
+        })
+          .then(response => response.ok ? response.json() : Promise.reject())
+          .then(data => {
+            formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
+            continuarJogo(); // só chamar se existir essa função
+          })
+          .catch(error => {
+            formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
+          });
+      });
+    }
+
+
     setInterval(createStar, 100);
   </script>
+
 </body>
+
 </html>
