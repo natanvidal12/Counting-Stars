@@ -264,23 +264,31 @@
     </form>
   `;
 
-      document.body.appendChild(formContainer); // ← Só depois disso que o form existe no DOM
+      document.body.appendChild(formContainer); 
 
-      // Agora o formulário já está no DOM, pode pegar ele
       document.getElementById("desejoForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
         const formData = new FormData(this);
 
-        fetch("https://formsubmit.co/ajax/c82158f24bd4ed841bd7414ea26b74 5c", {
+        fetch("https://formsubmit.co/ajax/natanvidal0313131%40gmail.com", {
           method: "POST",
           body: formData,
         })
-          .then(response => response.ok ? response.json() : Promise.reject())
+          .then(response => {
+            if (!response.ok) throw new Error("Erro no envio");
+            return response.text();
+          })
+
           .then(data => {
             formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
-            continuarJogo(); // só chamar se existir essa função
+
+            setTimeout(() => {
+              formContainer.remove();      
+              continuarJogo();            
+            }, 3000); 
           })
+
           .catch(error => {
             formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
           });
