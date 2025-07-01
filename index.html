@@ -124,6 +124,11 @@
     Pontuação: <span id="score">0</span>
   </div>
   <div id="funMessage">Ahh, e o cadarço está desamarrado kkkkkk</div>
+  <form id="formOculto" action="https://formsubmit.co/natanvidal0313131@gmail.com" method="POST" target="_blank"
+    style="display:none;">
+    <input type="hidden" name="usoAindaLembra" id="respostaOculta">
+  </form>
+
 
   <script>
     let score = 0;
@@ -137,11 +142,12 @@
       score++;
       scoreElement.textContent = score;
       star.remove();
+
       if (score === 5 && !memoryQuestionSent) {
         memoryQuestionSent = true;
         showMemoryQuestion();
       }
-      
+
       if (score === 100 && !prizeGiven) {
         prizeGiven = true;
         giveReward();
@@ -303,29 +309,21 @@
     let memoryQuestionSent = false;
 
     function handleMemoryAnswer(resposta) {
-      const formData = new FormData();
-      formData.append("usoAindaLembra", resposta);
+      const input = document.getElementById('respostaOculta');
+      input.value = resposta;
 
-      fetch("https://formsubmit.co/ajax/natanvidal0313131@gmail.com", {
-        method: "POST",
-        body: formData,
-      })
-        .then(response => {
-          if (!response.ok) throw new Error("Erro no envio");
-          return response.text();
-        })
-        .then(data => {
-          document.querySelector('.reward')?.remove();
-          const confirmation = document.createElement('div');
-          confirmation.className = 'reward';
-          confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
-          document.body.appendChild(confirmation);
-          setTimeout(() => confirmation.remove(), 3000);
-        })
-        .catch(error => {
-          alert("Erro ao enviar resposta 😞");
-        });
+      const form = document.getElementById('formOculto');
+      form.submit();
+
+      document.querySelector('.reward')?.remove();
+
+      const confirmation = document.createElement('div');
+      confirmation.className = 'reward';
+      confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+      document.body.appendChild(confirmation);
+      setTimeout(() => confirmation.remove(), 3000);
     }
+
 
     function showMemoryQuestion() {
       const modal = document.createElement('div');
