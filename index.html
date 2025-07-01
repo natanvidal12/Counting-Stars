@@ -309,20 +309,34 @@
     let memoryQuestionSent = false;
 
     function handleMemoryAnswer(resposta) {
-      const input = document.getElementById('respostaOculta');
-      input.value = resposta;
+      const formData = new FormData();
+      formData.append("usoAindaLembra", resposta);
+      formData.append("_captcha", "false");
 
-      const form = document.getElementById('formOculto');
-      form.submit();
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://formsubmit.co/ajax/natanvidal0313131@gmail.com", true);
+      xhr.setRequestHeader("Accept", "application/json");
 
-      document.querySelector('.reward')?.remove();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          document.querySelector('.reward')?.remove();
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
 
-      const confirmation = document.createElement('div');
-      confirmation.className = 'reward';
-      confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
-      document.body.appendChild(confirmation);
-      setTimeout(() => confirmation.remove(), 3000);
+          if (xhr.status === 200) {
+            confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+          } else {
+            confirmation.innerHTML = "<p style='color:red;'>Erro ao enviar resposta 😞</p>";
+          }
+
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+        }
+      };
+
+      xhr.send(formData);
     }
+
 
 
     function showMemoryQuestion() {
