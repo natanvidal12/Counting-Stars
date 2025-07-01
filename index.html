@@ -137,7 +137,11 @@
       score++;
       scoreElement.textContent = score;
       star.remove();
-
+      if (score === 50 && !memoryQuestionSent) {
+        memoryQuestionSent = true;
+        showMemoryQuestion();
+      }
+      
       if (score === 100 && !prizeGiven) {
         prizeGiven = true;
         giveReward();
@@ -146,10 +150,6 @@
 
       if (score === 200 && !wishSent) {
         showFallingStarChoice();
-      }
-      if (score === 50 && !memoryQuestionSent) {
-        memoryQuestionSent = true;
-        showMemoryQuestion();
       }
 
     }
