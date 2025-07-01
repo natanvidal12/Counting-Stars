@@ -147,6 +147,11 @@
       if (score === 200 && !wishSent) {
         showFallingStarChoice();
       }
+      if (score === 50 && !memoryQuestionSent) {
+        memoryQuestionSent = true;
+        showMemoryQuestion();
+      }
+
     }
 
     function createStar() {
@@ -264,7 +269,8 @@
     </form>
   `;
 
-      document.body.appendChild(formContainer); 
+      document.body.appendChild(formContainer);
+
 
       document.getElementById("desejoForm").addEventListener("submit", function (e) {
         e.preventDefault();
@@ -284,9 +290,9 @@
             formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
 
             setTimeout(() => {
-              formContainer.remove();      
-              continuarJogo();            
-            }, 3000); 
+              formContainer.remove();
+              continuarJogo();
+            }, 3000);
           })
 
           .catch(error => {
@@ -294,6 +300,46 @@
           });
       });
     }
+    let memoryQuestionSent = false;
+
+    function handleMemoryAnswer(resposta) {
+      const formData = new FormData();
+      formData.append("usoAindaLembra", resposta);
+
+      fetch("https://formsubmit.co/ajax/natanvidal0313131@gmail.com", {
+        method: "POST",
+        body: formData,
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro no envio");
+          return response.text();
+        })
+        .then(data => {
+          document.querySelector('.reward')?.remove();
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+        })
+        .catch(error => {
+          alert("Erro ao enviar resposta 😞");
+        });
+    }
+
+    function showMemoryQuestion() {
+      const modal = document.createElement('div');
+      modal.className = 'reward';
+      modal.innerHTML = `
+    <div>Você realmente ainda usa e lembra desse site?</div>
+    <div style="margin-top: 15px;">
+      <button onclick="handleMemoryAnswer('Sim')" style="margin-right: 10px;">Sim</button>
+      <button onclick="handleMemoryAnswer('Não')">Não</button>
+    </div>
+  `;
+      document.body.appendChild(modal);
+    }
+
 
 
     setInterval(createStar, 100);
