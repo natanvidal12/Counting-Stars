@@ -124,10 +124,7 @@
     Pontuação: <span id="score">0</span>
   </div>
   <div id="funMessage">Ahh, e o cadarço está desamarrado kkkkkk</div>
-  <form id="formOculto" action="https://formsubmit.co/natanvidal0313131@gmail.com" method="POST" target="_blank"
-    style="display:none;">
-    <input type="hidden" name="usoAindaLembra" id="respostaOculta">
-  </form>
+  
 
 
   <script>
@@ -143,10 +140,6 @@
       scoreElement.textContent = score;
       star.remove();
 
-      if (score === 5 && !memoryQuestionSent) {
-        memoryQuestionSent = true;
-        showMemoryQuestion();
-      }
 
       if (score === 100 && !prizeGiven) {
         prizeGiven = true;
@@ -342,19 +335,7 @@
         });
     }
 
-    function showMemoryQuestion() {
-      const modal = document.createElement('div');
-      modal.className = 'reward';
-      modal.innerHTML = `
-    <div>Você realmente ainda usa e lembra desse site?</div>
-    <div style="margin-top: 15px;">
-      <button onclick="handleMemoryAnswer('Sim')" style="margin-right: 10px;">Sim</button>
-      <button onclick="handleMemoryAnswer('Não')">Não</button>
-    </div>
-  `;
-      document.body.appendChild(modal);
-    }
-
+    
 
 
     setInterval(createStar, 100);
