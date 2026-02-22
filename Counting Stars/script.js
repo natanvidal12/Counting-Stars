@@ -1,0 +1,202 @@
+let score = 0;
+    let prizeGiven = false;
+    let wishSent = false;
+
+    const scoreElement = document.getElementById('score');
+
+    function addPointAndRemove(star) {
+      score++;
+      scoreElement.textContent = score;
+      star.remove();
+
+
+      if (score === 100 && !prizeGiven) {
+        prizeGiven = true;
+        giveReward();
+        funMessage.style.display = 'block';
+      }
+
+      if (score === 150 && !wishSent) {
+        showFallingStarChoice();
+            }
+    }
+
+    function createStar() {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.textContent = '★';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = 5 + Math.random() * 2 + 's';
+
+      if (score >= 100) {
+        star.classList.add('gold');
+      }
+
+      star.addEventListener('click', () => addPointAndRemove(star));
+      star.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        addPointAndRemove(star);
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, 8000);
+    }
+
+    function giveReward() {
+      const reward = document.createElement('div');
+      reward.className = 'reward';
+
+      const line1 = document.createElement('div');
+      line1.textContent = ' Você chegou em 100 estrelas!!';
+
+      const line2 = document.createElement('div');
+      line2.textContent = 'Você tinha razão... agora sim você tem uma constelação com as estrelas que está merecendo. E essas você pode guardar para sempre.';
+      line2.style.marginTop = '10px';
+
+
+      reward.appendChild(line1);
+      reward.appendChild(line2);
+      document.body.appendChild(reward);
+
+      setTimeout(() => reward.remove(), 10000);
+    }
+
+    function showFallingStarChoice() {
+      const modal = document.createElement('div');
+      modal.className = 'reward';
+      modal.innerHTML = `
+      <div>Quer ver a estrela cadente?</div>
+      <div style="margin-top: 15px;">
+        <button onclick="handleWishAnswer(true)" style="margin-right: 10px;">Sim</button>
+        <button onclick="handleWishAnswer(false)">Não</button>
+      </div>
+    `;
+      document.body.appendChild(modal);
+    }
+
+    function handleWishAnswer(answer) {
+      document.querySelector('.reward')?.remove();
+
+      const msg = document.createElement('div');
+      msg.className = 'reward';
+      msg.textContent = answer ? 'Então fica esperta...' : 'Vai aparecer mesmo assim, shiu kkkkkkk';
+      document.body.appendChild(msg);
+
+      setTimeout(() => {
+        msg.remove();
+        spawnWishStar();
+      }, 2000);
+    }
+
+    function spawnWishStar() {
+      const star = document.createElement('div');
+      star.classList.add('star', 'gold');
+      star.style.left = '50vw';
+      star.style.top = '10px';
+      star.style.fontSize = '8rem';
+      star.style.animationDuration = '3s';
+      star.textContent = '★';
+
+      star.addEventListener('click', () => {
+        if (!wishSent) showWishForm();
+        star.remove();
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        if (!wishSent) {
+          star.remove();
+          spawnWishStar();
+        }
+      }, 8000);
+    }
+
+    setTimeout(() => star.remove(), 8000);
+
+
+    function showWishForm() {
+      wishSent = true;
+
+      const formContainer = document.createElement('div');
+      formContainer.className = 'reward';
+
+      formContainer.innerHTML = `
+    <form id="desejoForm">
+      <label for="desejo">Qual seu desejo?</label><br><br>
+      <input type="text" name="desejo" id="desejo" required style="width: 100%; padding: 10px; font-size: 1rem;"><br><br>
+      <button type="submit" style="padding: 10px 20px;">Enviar</button>
+    </form>
+  `;
+
+      document.body.appendChild(formContainer);
+
+
+      document.getElementById("desejoForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("https://formsubmit.co/ajax/natanvidal0313131%40gmail.com", {
+          method: "POST",
+          body: formData,
+        })
+          .then(response => {
+            if (!response.ok) throw new Error("Erro no envio");
+            return response.text();
+          })
+
+          .then(data => {
+            formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
+
+            setTimeout(() => {
+              formContainer.remove();
+              continuarJogo();
+            }, 3000);
+          })
+
+          .catch(error => {
+            formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
+          });
+      });
+    }
+    let memoryQuestionSent = false;
+
+    function handleMemoryAnswer(resposta) {
+      const formData = new FormData();
+      formData.append("usoAindaLembra", resposta);
+      formData.append("_captcha", "false");
+
+      fetch("https://formsubmit.co/ajax/natanvidal0313131@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro no envio");
+          return response.json();
+        })
+        .then(data => {
+          document.querySelector('.reward')?.remove();
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+        })
+        .catch(error => {
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:red;'>Erro ao enviar resposta 😞</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+          console.error(error);
+        });
+    }
+
+    setInterval(createStar, 100);

@@ -1,0 +1,97 @@
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+      overflow: hidden;
+      height: 100vh;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .score {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .star {
+      position: absolute;
+      top: -10px;
+      font-size: 2.2rem;
+      animation: fall linear infinite;
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+      color: white;
+      text-shadow: 0 0 5px #fff;
+    }
+
+    .gold {
+      color: gold !important;
+      text-shadow: 0 0 10px gold;
+    }
+
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    .reward {
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border: 2px solid #ffffff;
+      border-radius: 20px;
+      animation: pop 0.5s ease;
+      text-align: center;
+      color: #e5ff00;
+      box-shadow: 0 0 20px #3304df;
+      z-index: 1000;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0) translate(-50%, -50%);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1) translate(-50%, -50%);
+        opacity: 1;
+      }
+    }
+
+    @keyframes beat {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.3);
+      }
+    }
