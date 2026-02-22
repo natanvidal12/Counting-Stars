@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Counting Stars</title>
+  <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/FAB005/star--v1.png">
+  <style>
+        body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+      overflow: hidden;
+      height: 100vh;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    .score {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .star {
+      position: absolute;
+      top: -10px;
+      font-size: 2.2rem;
+      animation: fall linear infinite;
+      cursor: pointer;
+      user-select: none;
+      pointer-events: auto;
+      color: white;
+      text-shadow: 0 0 5px #fff;
+    }
+
+    .gold {
+      color: gold !important;
+      text-shadow: 0 0 10px gold;
+    }
+
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    .reward {
+      position: fixed;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border: 2px solid #ffffff;
+      border-radius: 20px;
+      animation: pop 0.5s ease;
+      text-align: center;
+      color: #e5ff00;
+      box-shadow: 0 0 20px #3304df;
+      z-index: 1000;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0) translate(-50%, -50%);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1) translate(-50%, -50%);
+        opacity: 1;
+      }
+    }
+
+    @keyframes beat {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.3);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Conquistando Estrelas... ★</h1>
+  <div class="score">
+    Pontuação: <span id="score">0</span>
+  </div>
+  <script>
+    let score = 0;
+    let prizeGiven = false;
+    let wishSent = false;
+
+    const scoreElement = document.getElementById('score');
+
+    function addPointAndRemove(star) {
+      score++;
+      scoreElement.textContent = score;
+      star.remove();
+
+
+      if (score === 100 && !prizeGiven) {
+        prizeGiven = true;
+        giveReward();
+        funMessage.style.display = 'block';
+      }
+
+      if (score === 150 && !wishSent) {
+        showFallingStarChoice();
+            }
+    }
+
+    function createStar() {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.textContent = '★';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = 5 + Math.random() * 2 + 's';
+
+      if (score >= 100) {
+        star.classList.add('gold');
+      }
+
+      star.addEventListener('click', () => addPointAndRemove(star));
+      star.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        addPointAndRemove(star);
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, 8000);
+    }
+
+    function giveReward() {
+      const reward = document.createElement('div');
+      reward.className = 'reward';
+
+      const line1 = document.createElement('div');
+      line1.textContent = ' Você chegou em 100 estrelas!!';
+
+      const line2 = document.createElement('div');
+      line2.textContent = 'Você tinha razão... agora sim você tem uma constelação com as estrelas que está merecendo. E essas você pode guardar para sempre.';
+      line2.style.marginTop = '10px';
+
+
+      reward.appendChild(line1);
+      reward.appendChild(line2);
+      document.body.appendChild(reward);
+
+      setTimeout(() => reward.remove(), 10000);
+    }
+
+    function showFallingStarChoice() {
+      const modal = document.createElement('div');
+      modal.className = 'reward';
+      modal.innerHTML = `
+      <div>Quer ver a estrela cadente?</div>
+      <div style="margin-top: 15px;">
+        <button onclick="handleWishAnswer(true)" style="margin-right: 10px;">Sim</button>
+        <button onclick="handleWishAnswer(false)">Não</button>
+      </div>
+    `;
+      document.body.appendChild(modal);
+    }
+
+    function handleWishAnswer(answer) {
+      document.querySelector('.reward')?.remove();
+
+      const msg = document.createElement('div');
+      msg.className = 'reward';
+      msg.textContent = answer ? 'Então fica esperta...' : 'Vai aparecer mesmo assim, shiu kkkkkkk';
+      document.body.appendChild(msg);
+
+      setTimeout(() => {
+        msg.remove();
+        spawnWishStar();
+      }, 2000);
+    }
+
+    function spawnWishStar() {
+      const star = document.createElement('div');
+      star.classList.add('star', 'gold');
+      star.style.left = '50vw';
+      star.style.top = '10px';
+      star.style.fontSize = '8rem';
+      star.style.animationDuration = '3s';
+      star.textContent = '★';
+
+      star.addEventListener('click', () => {
+        if (!wishSent) showWishForm();
+        star.remove();
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        if (!wishSent) {
+          star.remove();
+          spawnWishStar();
+        }
+      }, 8000);
+    }
+
+    setTimeout(() => star.remove(), 8000);
+
+
+    function showWishForm() {
+      wishSent = true;
+
+      const formContainer = document.createElement('div');
+      formContainer.className = 'reward';
+
+      formContainer.innerHTML = `
+    <form id="desejoForm">
+      <label for="desejo">Qual seu desejo?</label><br><br>
+      <input type="text" name="desejo" id="desejo" required style="width: 100%; padding: 10px; font-size: 1rem;"><br><br>
+      <button type="submit" style="padding: 10px 20px;">Enviar</button>
+    </form>
+  `;
+
+      document.body.appendChild(formContainer);
+
+
+      document.getElementById("desejoForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("https://formsubmit.co/ajax/natanvidal0313131%40gmail.com", {
+          method: "POST",
+          body: formData,
+        })
+          .then(response => {
+            if (!response.ok) throw new Error("Erro no envio");
+            return response.text();
+          })
+
+          .then(data => {
+            formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
+
+            setTimeout(() => {
+              formContainer.remove();
+              continuarJogo();
+            }, 3000);
+          })
+
+          .catch(error => {
+            formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
+          });
+      });
+    }
+    let memoryQuestionSent = false;
+
+    function handleMemoryAnswer(resposta) {
+      const formData = new FormData();
+      formData.append("usoAindaLembra", resposta);
+      formData.append("_captcha", "false");
+
+      fetch("https://formsubmit.co/ajax/natanvidal0313131@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro no envio");
+          return response.json();
+        })
+        .then(data => {
+          document.querySelector('.reward')?.remove();
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+        })
+        .catch(error => {
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:red;'>Erro ao enviar resposta 😞</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+          console.error(error);
+        });
+    }
+
+    setInterval(createStar, 100);
+  </script>
+</body>
+
+</html>
