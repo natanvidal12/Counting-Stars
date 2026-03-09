@@ -169,7 +169,7 @@
       line1.textContent = ' Você chegou em 100 estrelas!!';
 
       const line2 = document.createElement('div');
-      line2.textContent = 'Você tinha razão... agora sim você tem uma constelação com as estrelas que está merecendo. E essas você pode guardar para sempre.';
+      line2.textContent = 'Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta';
       line2.style.marginTop = '10px';
 
 
@@ -375,72 +375,51 @@ document.addEventListener("click", createConstellationStar);
 
 const namorada = "ALÍCIA";
 
-function spawnStar(x, y){
+const constellationPositions = [
+  [280, 220], [300, 180], [320, 140], [340, 180], [360, 220], [310, 200], [330, 200],
+  [400, 140], [400, 160], [400, 180], [400, 200], [420, 220], [440, 220],
 
-const star = document.createElement("div");
-
-star.className = "star gold";
-
-star.textContent = "★";
-
-star.style.left = x + "px";
-star.style.top = y + "px";
-
-star.style.animation = "none";
-
-star.style.transform = "translate(-50%, -50%)";
-
-document.body.appendChild(star);
-
-}
-
-function showNameConstellation(){
-
-const stars = [
-
-[300,200],
-[320,180],
-[340,200],
-[360,220],
-
-[420,200],
-[440,180],
-[460,200],
-
-[520,200],
-[540,180],
-[560,200]
-
+  [480, 140], [480, 180], [480, 220], [470, 130],
+  
+  [520, 160], [540, 140], [560, 140], [580, 160], [580, 200], [560, 220], [540, 220], [520, 200],
+  
+  [620, 140], [620, 180], [620, 220],
+  
+  [660, 220], [680, 180], [700, 140], [720, 180], [740, 220], [690, 200], [710, 200]
 ];
 
-let i = 0;
-
-const interval = setInterval(()=>{
-
-spawnStar(stars[i][0], stars[i][1]);
-
-i++;
-
-if(i >= stars.length){
-clearInterval(interval);
+function spawnStar(x, y) {
+  const star = document.createElement("div");
+  star.className = "star gold";
+  star.textContent = "★";
+  star.style.left = x + "px";
+  star.style.top = y + "px";
+  star.style.animation = "none";
+  star.style.transform = "translate(-50%, -50%)";
+  document.body.appendChild(star);
 }
 
-},400);
-
+function showNameConstellation() {
+  let i = 0;
+  const interval = setInterval(() => {
+    spawnStar(constellationPositions[i][0], constellationPositions[i][1]);
+    i++;
+    if (i >= constellationPositions.length) {
+      clearInterval(interval);
+    }
+  }, 300);
 }
 
-function startConstellation(){
+function startConstellation() {
+  clearInterval(starInterval);
 
-clearInterval(starInterval);
+  showMessage("Cada estrela dessa constelação é um pedacinho do nosso amor que nunca vai se apagar");
 
-showMessage("Agora existe uma constelação com o seu nome.");
+  setTimeout(() => {
+    showNameConstellation();
+  }, 1500);
 
-setTimeout(()=>{
-
-showNameConstellation();
-
-},2000);
-
+  document.removeEventListener("click", createConstellationStar);
 }
   </script>
 </body>
