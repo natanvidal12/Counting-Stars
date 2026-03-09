@@ -373,8 +373,6 @@ function startConstellation(){
 
 clearInterval(starInterval);
 
-showMessage("Agora vamos criar nossa própria constelação.");
-
 document.addEventListener("click", createConstellationStar);
 
 }
@@ -382,19 +380,21 @@ document.addEventListener("click", createConstellationStar);
 const namorada = "ALÍCIA";
 
 const constellationPositions = [
-  [200,200],[240,200],[280,200],[320,200],[360,200],
-  [200,240],[240,240],[280,240],[320,240],[360,240],
-  [200,280],[240,280],[280,280],[320,280],[360,280],
-  [200,320],[240,320],[280,320],[320,320],[360,320],
-  [200,360],[240,360],[280,360],[320,360],[360,360] 
+  [0, 0], [40, -40], [80, 0], [120, 40], [160, 0],
+  [0, 50], [40, 50], [80, 50], [120, 50], [160, 50],
+  [0, 100], [40, 100], [80, 100], [120, 100], [160, 100],
+  [0, 150], [40, 150], [80, 150], [120, 150], [160, 150],
+  [0, 200], [40, 200], [80, 200], [120, 200], [160, 200] 
 ];
 
 function spawnStar(x, y) {
   const star = document.createElement("div");
   star.className = "star gold";
   star.textContent = "★";
-  star.style.left = x + "px";
-  star.style.top = y + "px";
+
+  star.style.left = (centerX + x - 80) + "px";
+  star.style.top = (centerY + y - 100) + "px"; 
+
   star.style.animation = "none";
   star.style.transform = "translate(-50%, -50%)";
   document.body.appendChild(star);
