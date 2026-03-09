@@ -317,22 +317,28 @@
     
     let chapter = 1;
 
-    function checkChapter(){
-      if (score === 30 && chapter === 1) {
-        chapter = 2;
-        showMessage("Talvez você não saiba... Mas você É a minha estrela favorita.");
-      }
+    function checkChapter() {
+  if (score === 30 && chapter === 1) {
+    chapter = 2;
+    showMessage("Talvez você não saiba... mas você é a minha estrela guia, e cada estrela que tocamos está se unindo para formar algo maior: nosso infinito juntos.");
+  }
 
-      if (score === 70 && chapter === 2) {
-        chapter = 3;
-        showMessage("Alguns infinitos são maiores que os outros né meu amor?")
-      }
+  if (score === 70 && chapter === 2) {
+    chapter = 3;
+    showMessage("Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta");
+  }
 
-      if (score === 100 && chapter === 3) {
-        chapter = 4;
-        startConstellation();
-      }
-    }
+  if (score === 100 && chapter === 3) {
+    chapter = 4;
+    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos");
+    spawnWishStar();
+  }
+
+  if (score === 150 && chapter === 4) {
+    chapter = 5;
+    startConstellation();
+  }
+}
 
   function showMessage(text){
     const modal = document.createElement('div');
@@ -376,16 +382,11 @@ document.addEventListener("click", createConstellationStar);
 const namorada = "ALÍCIA";
 
 const constellationPositions = [
-  [280, 220], [300, 180], [320, 140], [340, 180], [360, 220], [310, 200], [330, 200],
-  [400, 140], [400, 160], [400, 180], [400, 200], [420, 220], [440, 220],
-
-  [480, 140], [480, 180], [480, 220], [470, 130],
-  
-  [520, 160], [540, 140], [560, 140], [580, 160], [580, 200], [560, 220], [540, 220], [520, 200],
-  
-  [620, 140], [620, 180], [620, 220],
-  
-  [660, 220], [680, 180], [700, 140], [720, 180], [740, 220], [690, 200], [710, 200]
+  [200,200],[240,200],[280,200],[320,200],[360,200],
+  [200,240],[240,240],[280,240],[320,240],[360,240],
+  [200,280],[240,280],[280,280],[320,280],[360,280],
+  [200,320],[240,320],[280,320],[320,320],[360,320],
+  [200,360],[240,360],[280,360],[320,360],[360,360] 
 ];
 
 function spawnStar(x, y) {
