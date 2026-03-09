@@ -178,7 +178,6 @@
 
   setTimeout(() => {
     reward.remove();
-    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos");
     setTimeout(() => spawnWishStar(), 2000);
   }, 5000); 
 }
@@ -268,12 +267,17 @@
           })
 
           .then(data => {
-            formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
+  formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
 
-            setTimeout(() => {
-              formContainer.remove();
-            }, 3000);
-          })
+  setTimeout(() => {
+    formContainer.remove();
+
+    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos", () => {
+      spawnWishStar();
+    });
+
+  }, 3000);
+})
 
           .catch(error => {
             formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
