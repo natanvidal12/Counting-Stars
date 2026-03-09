@@ -162,23 +162,26 @@
     }
 
     function giveReward() {
-      const reward = document.createElement('div');
-      reward.className = 'reward';
+  const reward = document.createElement('div');
+  reward.className = 'reward';
 
-      const line1 = document.createElement('div');
-      line1.textContent = ' Você chegou em 100 estrelas!!';
+  const line1 = document.createElement('div');
+  line1.textContent = 'Você chegou em 100 estrelas!!';
 
-      const line2 = document.createElement('div');
-      line2.textContent = 'Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta';
-      line2.style.marginTop = '10px';
+  const line2 = document.createElement('div');
+  line2.textContent = 'Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta';
+  line2.style.marginTop = '10px';
 
+  reward.appendChild(line1);
+  reward.appendChild(line2);
+  document.body.appendChild(reward);
 
-      reward.appendChild(line1);
-      reward.appendChild(line2);
-      document.body.appendChild(reward);
-
-      setTimeout(() => reward.remove(), 10000);
-    }
+  setTimeout(() => {
+    reward.remove();
+    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos");
+    setTimeout(() => spawnWishStar(), 2000);
+  }, 5000); 
+}
 
     function showFallingStarChoice() {
       const modal = document.createElement('div');
@@ -329,10 +332,9 @@
   }
 
   if (score === 100 && chapter === 3) {
-    chapter = 4;
-    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos");
-    spawnWishStar();
-  }
+  chapter = 4;
+  giveReward(); 
+}
 
   if (score === 150 && chapter === 4) {
     chapter = 5;
