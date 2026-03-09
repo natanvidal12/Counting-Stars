@@ -41,6 +41,7 @@
       pointer-events: auto;
       color: white;
       text-shadow: 0 0 5px #fff;
+      filter: drop-shadow(0 0 8px white);
     }
 
     .gold {
@@ -107,9 +108,9 @@
 </head>
 
 <body>
-  <h1>Conquistando Estrelas... ★</h1>
+  <h1>Nosso Pequeno Infinito ♾</h1>
   <div class="score">
-    Pontuação: <span id="score">0</span>
+    Nosso Infinito: <span id="score">0</span> ♾
   </div>
   <script>
     let score = 0;
@@ -127,12 +128,13 @@
       if (score === 100 && !prizeGiven) {
         prizeGiven = true;
         giveReward();
-        funMessage.style.display = 'block';
       }
 
       if (score === 150 && !wishSent) {
         showFallingStarChoice();
             }
+      
+      checkChapter();
     }
 
     function createStar() {
@@ -229,7 +231,6 @@
       }, 8000);
     }
 
-    setTimeout(() => star.remove(), 8000);
 
 
     function showWishForm() {
@@ -268,7 +269,6 @@
 
             setTimeout(() => {
               formContainer.remove();
-              continuarJogo();
             }, 3000);
           })
 
@@ -313,7 +313,135 @@
         });
     }
 
-    setInterval(createStar, 100);
+    let starInterval = setInterval(createStar, 100);
+    
+    let chapter = 1;
+
+    function checkChapter(){
+      if (score === 30 && chapter === 1) {
+        chapter = 2;
+        showMessage("Talvez você não saiba... Mas você É a minha estrela favorita.");
+      }
+
+      if (score === 70 && chapter === 2) {
+        chapter = 3;
+        showMessage("Alguns infinitos são maiores que os outros né meu amor?")
+      }
+
+      if (score === 100 && chapter === 3) {
+        chapter = 4;
+        startConstellation();
+      }
+    }
+
+  function showMessage(text){
+    const modal = document.createElement('div');
+    modal.className = 'reward';
+    modal.textContent = text;
+
+    document.body.appendChild(modal);
+
+    setTimeout(() => modal.remove(), 6000)
+  }
+
+  function createConstellationStar(e){
+
+const star = document.createElement("div");
+
+star.className = "star gold";
+
+star.textContent = "★";
+
+star.style.left = e.clientX + "px";
+star.style.top = e.clientY + "px";
+
+star.style.animation = "none";
+
+star.style.transform = "translate(-50%, -50%)";
+
+document.body.appendChild(star);
+
+}
+
+function startConstellation(){
+
+clearInterval(starInterval);
+
+showMessage("Agora vamos criar nossa própria constelação.");
+
+document.addEventListener("click", createConstellationStar);
+
+}
+
+const namorada = "ALÍCIA";
+
+function spawnStar(x, y){
+
+const star = document.createElement("div");
+
+star.className = "star gold";
+
+star.textContent = "★";
+
+star.style.left = x + "px";
+star.style.top = y + "px";
+
+star.style.animation = "none";
+
+star.style.transform = "translate(-50%, -50%)";
+
+document.body.appendChild(star);
+
+}
+
+function showNameConstellation(){
+
+const stars = [
+
+[300,200],
+[320,180],
+[340,200],
+[360,220],
+
+[420,200],
+[440,180],
+[460,200],
+
+[520,200],
+[540,180],
+[560,200]
+
+];
+
+let i = 0;
+
+const interval = setInterval(()=>{
+
+spawnStar(stars[i][0], stars[i][1]);
+
+i++;
+
+if(i >= stars.length){
+clearInterval(interval);
+}
+
+},400);
+
+}
+
+function startConstellation(){
+
+clearInterval(starInterval);
+
+showMessage("Agora existe uma constelação com o seu nome.");
+
+setTimeout(()=>{
+
+showNameConstellation();
+
+},2000);
+
+}
   </script>
 </body>
 
