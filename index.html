@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Counting Stars</title>
+  <title>The Fault in Our Stars</title>
   <link rel="icon" type="image/png" href="https://img.icons8.com/ios-filled/50/FAB005/star--v1.png">
   <style>
         body {
@@ -108,7 +108,376 @@
 </head>
 
 <body>
-  <h1>Counting Stars em Update!!!</h1>
- </body>
+  <h1>Nosso Pequeno Infinito ♾</h1>
+  <div class="score">
+    Nosso Infinito: <span id="score">0</span> ♾
+  </div>
+  <div class="score">
+    Capítulo: <span id="chapter">1</span>
+  </div>
+  <script>
+    let score = 0;
+    let prizeGiven = false;
+    let wishSent = false;
+
+    const scoreElement = document.getElementById('score');
+    const chapterElement = document.getElementById('chapter');
+    function addPointAndRemove(star) {
+      score++;
+      scoreElement.textContent = score;
+      star.remove();
+      checkChapter();
+    }
+
+    function createStar() {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.textContent = '★';
+      star.style.left = Math.random() * 100 + 'vw';
+      star.style.animationDuration = 5 + Math.random() * 2 + 's';
+
+      if (score >= 100) {
+        star.classList.add('gold');
+      }
+
+      star.addEventListener('click', () => addPointAndRemove(star));
+      star.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        addPointAndRemove(star);
+      });
+
+      document.body.appendChild(star);
+
+      setTimeout(() => {
+        star.remove();
+      }, 8000);
+    }
+
+    function giveReward() {
+  const reward = document.createElement('div');
+  reward.className = 'reward';
+
+  const line1 = document.createElement('div');
+  line1.textContent = 'Você chegou em 100 estrelas!!';
+
+  const line2 = document.createElement('div');
+  line2.textContent = 'Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta';
+  line2.style.marginTop = '10px';
+
+  reward.appendChild(line1);
+  reward.appendChild(line2);
+  document.body.appendChild(reward);
+
+  setTimeout(() => {
+  reward.remove();
+  setTimeout(() => showFallingStarChoice(), 2000);
+}, 5000);
+}
+
+    function showFallingStarChoice() {
+      const modal = document.createElement('div');
+      modal.className = 'reward';
+      modal.innerHTML = `
+      <div>Quer ver a estrela cadente?</div>
+      <div style="margin-top: 15px;">
+        <button onclick="handleWishAnswer(true)" style="margin-right: 10px;">Sim</button>
+        <button onclick="handleWishAnswer(false)">Não</button>
+      </div>
+    `;
+      document.body.appendChild(modal);
+    }
+
+    function handleWishAnswer(answer) {
+      document.querySelector('.reward')?.remove();
+
+      const msg = document.createElement('div');
+      msg.className = 'reward';
+      msg.textContent = answer ? 'Então fica esperta...' : 'Vai aparecer mesmo assim, shiu kkkkkkk';
+      document.body.appendChild(msg);
+
+      setTimeout(() => {
+        msg.remove();
+        spawnWishStar();
+      }, 2000);
+    }
+
+    function spawnWishStar() {
+
+  if (wishSent) return;
+
+  const star = document.createElement('div');
+  star.classList.add('star', 'gold');
+
+  star.style.left = '50vw';
+  star.style.top = '10px';
+  star.style.fontSize = '8rem';
+  star.style.animationDuration = '3s';
+
+  star.textContent = '★';
+
+  let clicked = false;
+
+  star.addEventListener('click', () => {
+
+    if (clicked) return;
+
+    clicked = true;
+    wishSent = true;
+
+    star.remove();
+    showWishForm();
+
+  });
+
+  document.body.appendChild(star);
+
+  setTimeout(() => {
+
+    if (!clicked && !wishSent) {
+      star.remove();
+      spawnWishStar();
+    }
+
+  }, 4000);
+
+}
+
+
+
+    function showWishForm() {
+      wishSent = true;
+
+      const formContainer = document.createElement('div');
+      formContainer.className = 'reward';
+
+      formContainer.innerHTML = `
+    <form id="desejoForm">
+      <label for="desejo">Qual seu desejo?</label><br><br>
+      <input type="text" name="desejo" id="desejo" required style="width: 100%; padding: 10px; font-size: 1rem;"><br><br>
+      <button type="submit" style="padding: 10px 20px;">Enviar</button>
+    </form>
+  `;
+
+      document.body.appendChild(formContainer);
+
+
+      document.getElementById("desejoForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch("https://formsubmit.co/ajax/natanvidal0313131%40gmail.com", {
+          method: "POST",
+          body: formData,
+        })
+          .then(response => {
+            if (!response.ok) throw new Error("Erro no envio");
+            return response.text();
+          })
+
+          .then(data => {
+  formContainer.innerHTML = "<p style='color: white;'>Desejo enviado com sucesso! ⭐</p>";
+
+  setTimeout(() => {
+    formContainer.remove();
+
+    showMessage("O nosso infinito não para por aqui, ainda temos algo a mais pra ver juntos");
+
+  }, 3000);
+})
+
+          .catch(error => {
+            formContainer.innerHTML = "<p style='color: red;'>Erro ao enviar desejo 😞</p>";
+          });
+      });
+    }
+    let memoryQuestionSent = false;
+
+    function handleMemoryAnswer(resposta) {
+      const formData = new FormData();
+      formData.append("usoAindaLembra", resposta);
+      formData.append("_captcha", "false");
+
+      fetch("https://formsubmit.co/ajax/natanvidal0313131@gmail.com", {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Erro no envio");
+          return response.json();
+        })
+        .then(data => {
+          document.querySelector('.reward')?.remove();
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:white;'>Resposta enviada! ⭐</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+        })
+        .catch(error => {
+          const confirmation = document.createElement('div');
+          confirmation.className = 'reward';
+          confirmation.innerHTML = "<p style='color:red;'>Erro ao enviar resposta 😞</p>";
+          document.body.appendChild(confirmation);
+          setTimeout(() => confirmation.remove(), 3000);
+          console.error(error);
+        });
+    }
+
+    let starInterval = setInterval(createStar, 300);
+    
+    let chapter = 1;
+
+    function checkChapter() {
+  if (score === 30 && chapter === 1) {
+    chapter = 2;
+    chapterElement.textContent = chapter;
+
+    showMessage("Talvez você não saiba... mas você é a minha estrela guia, e cada estrela que tocamos está se unindo para formar algo maior: nosso infinito juntos.");
+  }
+
+  if (score === 70 && chapter === 2) {
+    chapter = 3;
+    chapterElement.textContent = chapter;
+    showMessage("Alguns infinitos são maiores que outros, e o nosso começa em 100 estrelas que tentam juntas chegar a sua beleza de outro planeta");
+  }
+
+  if (score === 100 && chapter === 3) {
+    chapter = 4;
+    chapterElement.textContent = chapter;
+    if (!prizeGiven) {
+      prizeGiven = true;
+      giveReward();
+    }
+  }
+
+  if (score === 150 && chapter === 4) {
+    chapter = 5;
+    chapterElement.textContent = chapter;
+    startConstellation();
+  }
+}
+
+  function showMessage(text){
+    const modal = document.createElement('div');
+    modal.className = 'reward';
+    modal.textContent = text;
+
+    document.body.appendChild(modal);
+
+    setTimeout(() => modal.remove(), 6000)
+  }
+
+  function createConstellationStar(e){
+
+const star = document.createElement("div");
+
+star.className = "star gold";
+
+star.textContent = "★";
+
+star.style.left = e.clientX + "px";
+star.style.top = e.clientY + "px";
+
+star.style.animation = "none";
+
+star.style.transform = "translate(-50%, -50%)";
+
+document.body.appendChild(star);
+
+}
+
+const namorada = "ALÍCIA";
+const centerX = window.innerWidth / 2;
+const centerY = window.innerHeight / 6;
+
+const constellationPositions = [
+  [-62, -76], [-44, -76],
+  [-206, -40], [-188, -40], [-116, -40], [-44, -40], [10, -40], [28, -40], [46, -40], [64, -40], [118, -40], [190, -40], [208, -40],
+  [-206, -22], [-188, -22], [-170, -22], [-116, -22], [-44, -22], [-8, -22], [10, -22], [64, -22], [82, -22], [118, -22], [172, -22], [190, -22], [208, -22],
+  [-224, -4], [-206, -4], [-170, -4], [-116, -4], [-44, -4], [-8, -4], [118, -4], [172, -4], [208, -4],
+  [-224, 14], [-206, 14], [-188, 14], [-170, 14], [-116, 14], [-44, 14], [-8, 14], [10, 14], [118, 14], [154, 14], [172, 14], [190, 14], [208, 14], [226, 14],
+  [-224, 32], [-206, 32], [-188, 32], [-170, 32], [-152, 32], [-116, 32], [-44, 32], [-8, 32], [10, 32], [28, 32], [46, 32], [64, 32], [118, 32], [154, 32], [172, 32], [190, 32], [208, 32], [226, 32],
+  [-242, 50], [-224, 50], [-152, 50], [-116, 50], [-98, 50], [-80, 50], [-44, 50], [28, 50], [46, 50], [118, 50], [154, 50], [226, 50], [244, 50]
+];
+
+
+function spawnStar(x, y) {
+
+  const star = document.createElement("div");
+  star.className = "star gold";
+  star.textContent = "★";
+
+  star.style.left = (centerX + x) + "px";
+  star.style.top = (centerY + y) + "px";
+
+  star.style.animation = "none";
+  star.style.transform = "translate(-50%, -50%)";
+
+  document.body.appendChild(star);
+
+}
+
+function showNameConstellation(){
+
+  let i = 0;
+
+  const interval = setInterval(() => {
+
+    spawnStar(
+      constellationPositions[i][0],
+      constellationPositions[i][1]
+    );
+
+    i++;
+
+    if(i >= constellationPositions.length){
+
+      clearInterval(interval);
+
+      setTimeout(showFinalMessage, 2000);
+
+    }
+
+  }, 200);
+
+}
+
+function showFinalMessage(){
+
+  const final = document.createElement("div");
+  final.className = "reward";
+
+  final.style.top = "80%";
+
+  final.innerHTML = `
+  <div>Alguns infinitos são maiores que outros...</div>
+  <div style="margin-top:10px;">
+  E o nosso começou contando estrelas ⭐
+  </div>
+  `;
+
+  document.body.appendChild(final);
+
+}
+
+function startConstellation(){
+
+  clearInterval(starInterval);
+
+  showMessage("Cada estrela dessa constelação é um pedacinho do nosso amor que nunca vai se apagar");
+
+  setTimeout(() => {
+
+    showNameConstellation();
+
+  }, 1500);
+
+}
+  </script>
+</body>
 
 </html>
